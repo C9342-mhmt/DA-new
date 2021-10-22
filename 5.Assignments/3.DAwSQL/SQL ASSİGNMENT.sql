@@ -22,18 +22,14 @@ INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)
 VALUES('11',	'44',	'300',	'22-05-2021');       
 
 
---	Sum amounts for each sender (debits) and receiver (credits),
-
 select Sender_ID, SUM (Amount) As Sender
 from Transactions
 group by Sender_ID;
-
 
 select Receiver_ID, SUM (Amount) As Receiver
 from Transactions
 group by Receiver_ID
 
---Full (outer) join debits and credits tables on account id, taking net change as difference between credits and debits, coercing nulls to zeros with coalesce()
 
 SELECT COALESCE(S.Sender_ID, R.Receiver_Id) AS Acount_ID ,(COALESCE(R.Receiver,0)-COALESCE(S.Sender,0)) AS Net_Change
 FROM  (select Sender_ID, SUM (Amount) As Sender from Transactions group by Sender_ID) AS S
